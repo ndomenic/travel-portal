@@ -1,0 +1,11 @@
+version: '3.5'
+
+services:
+
+  travel-portal-production:
+    container_name: travel-portal-production
+    build:
+      context: .
+      dockerfile: Dockerfile-production
+    ports:
+      - '80:80'

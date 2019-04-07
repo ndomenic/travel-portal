@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+
+  travel-portal:
+    container_name: travel-portal
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+  redis:
+    image: "redis:alpine"
