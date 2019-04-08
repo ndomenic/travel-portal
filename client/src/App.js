@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
 
 class App extends Component {
+  constructor () {
+    super()
+    console.log("test")
+    axios.get('http://server:8080/helloWorld')
+    .then(response => console.log(response))
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Hello, world! Test 
+            Hello, world! asds
           </p>
           <a
             className="App-link"

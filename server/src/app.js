@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 
-const buildDir = __dirname.substring(0, __dirname.length - 6) + 'client/build'
+const buildDir = __dirname.substring(0, __dirname.length - 10) + 'client/build'
 
 const app = express();
 
@@ -10,7 +10,8 @@ app.use(express.static(buildDir));
 
 // An api endpoint that returns a short list of items
 app.get('/helloWorld', (req,res) => {
-    res.json({"foo": "bar"});
+	console.log("test");
+    res.json({"foo": "test2"});
 });
 
 // Handles any requests that don't match the ones above
