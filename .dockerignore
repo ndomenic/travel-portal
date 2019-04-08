@@ -1,4 +1,4 @@
-.git
-.idea
-node_modules
-build
+#.git
+#.idea
+#node_modules
+#build
