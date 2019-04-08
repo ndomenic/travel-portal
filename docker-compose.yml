@@ -2,12 +2,27 @@ version: '3.5'
 
 services:
 
-  travel-portal:
-    container_name: travel-portal
+  # server:
+  #   container_name: travel-portal-server
+  #   build:
+  #     context: .
+  #     dockerfile: server/Dockerfile
+  #   ports:
+  #     - '8080:8080'
+  #   expose:
+  #     - '8080'
+
+  client:
+    container_name: travel-portal-client
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: client/Dockerfile
+    volumes:
+      - ./client/src:/usr/src/app/client/src:ro
+      - ./client/public:/usr/src/app/client/public:ro
     ports:
       - '3000:3000'
     expose:
       - '3000'
+    # depends_on:
+    #   - server
