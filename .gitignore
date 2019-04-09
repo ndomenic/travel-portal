@@ -72,6 +72,9 @@ typings/
 # production
 /client/build
 
+# database temp files
+/server/db
+
 # misc
 .DS_Store
 .env.local
