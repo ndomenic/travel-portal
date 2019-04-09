@@ -7,8 +7,8 @@ class App extends Component {
   constructor () {
     super()
     console.log("test")
-    axios.get('http://server:8080/helloWorld')
-    .then(response => console.log(response))
+    axios.get('http://localhost:8080/helloWorld')
+    .then(response => console.log(response.data))
   }
 
   render() {
@@ -17,7 +17,7 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Hello, world! asds
+            Hello, world!
           </p>
           <a
             className="App-link"
