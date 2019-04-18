@@ -10,6 +10,14 @@ const connection = mysql.createConnection({
 
 connection.connect();
 
+connection.query('SELECT * FROM test', function(err, rows, fields) {
+	if (rows.length == 0) {
+		connection.query('INSERT INTO test(str) VALUES ("Hello, world!")', function (err, rows, fields) {
+		  if (err) throw err
+		});
+	}
+});
+
 //Set up dummy data
 connection.query('CREATE TABLE IF NOT EXISTS test( \
 	id INT AUTO_INCREMENT, \
@@ -17,10 +25,6 @@ connection.query('CREATE TABLE IF NOT EXISTS test( \
 	PRIMARY KEY (id)\
 	)', function (err, rows, fields) {
   		if (err) throw err
-
-	  	connection.query('INSERT INTO test(str) VALUES ("Hello, world!")', function (err, rows, fields) {
-		  if (err) throw err
-		})
 });
 
 //Export the connection

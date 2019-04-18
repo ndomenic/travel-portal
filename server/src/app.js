@@ -12,11 +12,22 @@ app.use(express.static(buildDir));
 
 const conn = db.connection;
 
-// An api endpoint that returns a short list of items
-app.get('/helloWorld', (req,res) => {
-	conn.query('SELECT * FROM test WHERE id=1', function (err, rows, fields) {
+app.get('/getAllFromDB', (req,res) => {
+	conn.query('SELECT * FROM test', function (err, rows, fields) {
 		if (err) throw err
-		res.json({"test": rows[0]["str"]});
+		res.json({"rows": rows});
+	});
+});
+
+app.post('/addToDB', (req,res) => {
+	conn.query('INSERT INTO test(str) VALUES ("Hello, world!")', function (err, rows, fields) {
+		if (err) throw err
+	});
+});
+
+app.post('/deleteAllFromDB', (req,res) => {
+	conn.query('DELETE FROM test', function (err, rows, fields) {
+		if (err) throw err
 	});
 });
 
