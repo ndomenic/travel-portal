@@ -3,7 +3,7 @@ const path = require('path');
 const cors = require('cors');
 const db = require('./db-config');
 
-const buildDir = __dirname.substring(0, __dirname.length - 10) + 'client/build'
+const buildDir = __dirname.substring(0, __dirname.length - 3) + 'build'
 
 //Setup the express app
 const app = express();

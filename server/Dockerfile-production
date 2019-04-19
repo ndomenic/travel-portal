@@ -1,0 +1,24 @@
+FROM node:alpine
+
+#Setup the file structure for the server
+RUN mkdir -p /src/app/server
+WORKDIR /src/app/server
+COPY ./server/package.json /src/app/server
+COPY ./server/src /src/app/server/src
+
+#Setup the temporary file structure for the client source code
+RUN mkdir -p /src/app/client
+COPY ./client/src /src/app/server/client/src
+COPY ./client/public /src/app/server/client/public
+COPY ./client/package.json /src/app/server/client
+
+#Build the production client
+WORKDIR /src/app/server/client
+RUN npm install
+RUN npm run build
+
+#Remove the temporary client source code
+WORKDIR /src/app/server
+RUN mkdir build
+RUN mv client/build/* build
+RUN rm -rf client

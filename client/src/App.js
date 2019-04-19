@@ -4,11 +4,30 @@ import './App.css';
 import axios from 'axios';
 
 class App extends Component {
-  constructor () {
-    super()
-    console.log("test")
-    axios.get('http://localhost:8080/helloWorld')
-    .then(response => console.log(response.data))
+  constructor (props) {
+    super(props);
+
+    //Bind the class functions
+    this.getFromDB = this.getFromDB.bind(this);
+    this.addToDB = this.addToDB.bind(this);
+    this.deleteAllFromDB = this.deleteAllFromDB.bind(this);
+
+    this.getFromDB();
+  }
+
+  getFromDB() {
+    axios.get('http://localhost:8080/getAllFromDB')
+    .then(response => console.log(response.data["rows"]))
+  }
+
+  addToDB() {
+    axios.post('http://localhost:8080/addToDB');
+    this.getFromDB();
+  }
+
+  deleteAllFromDB() {
+    axios.post('http://localhost:8080/deleteAllFromDB');
+    this.getFromDB();
   }
 
   render() {
@@ -19,14 +38,14 @@ class App extends Component {
           <p>
             Hello, world!
           </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <button
+            onClick={this.addToDB}>
+            Add To DB
+          </button>
+          <button
+            onClick={this.deleteAllFromDB}>
+            Delete All From DB
+          </button>
         </header>
       </div>
     );

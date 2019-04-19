@@ -1,11 +1,29 @@
 version: '3.5'
 
 services:
+  db:
+    container_name: db-production
+    image: mariadb
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./server/db:/var/lib/mysql
 
   travel-portal-production:
     container_name: travel-portal-production
     build:
       context: .
-      dockerfile: Dockerfile-production
+      dockerfile: server/Dockerfile-production
     ports:
-      - '80:80'
+      - 8080:8080
+    links:
+      - db
+    depends_on:
+      - db
+    command: [sh, -c, "npm install && npm start"]
