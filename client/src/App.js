@@ -12,21 +12,23 @@ class App extends Component {
     this.addToDB = this.addToDB.bind(this);
     this.deleteAllFromDB = this.deleteAllFromDB.bind(this);
 
+    console.log(process.env.REACT_APP_API);
+
     this.getFromDB();
   }
 
   getFromDB() {
-    axios.get('http://localhost:8080/getAllFromDB')
+    axios.get(process.env.REACT_APP_API + '/getAllFromDB')
     .then(response => console.log(response.data["rows"]))
   }
 
   addToDB() {
-    axios.post('http://localhost:8080/addToDB');
+    axios.post(process.env.REACT_APP_API + '/addToDB');
     this.getFromDB();
   }
 
   deleteAllFromDB() {
-    axios.post('http://localhost:8080/deleteAllFromDB');
+    axios.post(process.env.REACT_APP_API + '/deleteAllFromDB');
     this.getFromDB();
   }
 
