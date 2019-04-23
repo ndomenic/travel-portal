@@ -11,6 +11,7 @@ RUN mkdir -p /src/app/client
 COPY ./client/src /src/app/server/client/src
 COPY ./client/public /src/app/server/client/public
 COPY ./client/package.json /src/app/server/client
+COPY ./client/.env.production /src/app/client/.env
 
 #Build the production client
 WORKDIR /src/app/server/client

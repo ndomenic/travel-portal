@@ -8,8 +8,6 @@ const connection = mysql.createConnection({
   database : 'db'
 });
 
-connection.connect();
-
 connection.query('SELECT * FROM test', function(err, rows, fields) {
 	if (rows.length == 0) {
 		connection.query('INSERT INTO test(str) VALUES ("Hello, world!")', function (err, rows, fields) {
