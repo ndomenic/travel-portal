@@ -12,8 +12,6 @@ class App extends Component {
     this.addToDB = this.addToDB.bind(this);
     this.deleteAllFromDB = this.deleteAllFromDB.bind(this);
 
-    console.log(process.env.REACT_APP_API);
-
     this.getFromDB();
   }
 
