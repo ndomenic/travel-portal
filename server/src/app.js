@@ -13,6 +13,7 @@ app.use(express.static(buildDir));
 const conn = db.connection;
 
 app.get('/getAllFromDB', (req,res) => {
+	console.log("Hit endpoint /getAllFromDB");
 	conn.query('SELECT * FROM test', function (err, rows, fields) {
 		if (err) throw err
 		res.json({"rows": rows});
@@ -20,12 +21,14 @@ app.get('/getAllFromDB', (req,res) => {
 });
 
 app.post('/addToDB', (req,res) => {
+	console.log("Hit endpoint /addToDB");
 	conn.query('INSERT INTO test(str) VALUES ("Hello, world!")', function (err, rows, fields) {
 		if (err) throw err
 	});
 });
 
 app.post('/deleteAllFromDB', (req,res) => {
+	console.log("Hit endpoint /deleteAllFromDB");
 	conn.query('DELETE FROM test', function (err, rows, fields) {
 		if (err) throw err
 	});
@@ -33,6 +36,7 @@ app.post('/deleteAllFromDB', (req,res) => {
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
+	console.log("Hit endpoint /*");
     res.sendFile(path.join(buildDir+'/index.html'));
 });
 
