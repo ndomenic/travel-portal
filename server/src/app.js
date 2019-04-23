@@ -41,6 +41,14 @@ app.get('*', (req,res) =>{
 });
 
 const port = process.env.PORT || 8080;
-app.listen(port);
+app.listen(port).on('error', function(err){
+    console.log('An error occurred!');
+    console.log(err);
+});
+
+process.on('uncaughtException', function(err) {
+    console.log('process.on handler');
+    console.log(err);
+});
 
 console.log('App is listening on port ' + port);
