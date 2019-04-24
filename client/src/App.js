@@ -5,6 +5,7 @@ import './App.css';
 import axios from 'axios';
 import TopBar from './TopBar';
 import SelectName from './SelectName';
+import Description from './Description';
 
 class App extends Component {
   constructor (props) {
@@ -42,19 +43,22 @@ class App extends Component {
         </header>
         <main>
           <TopBar/>
-          <Card className="Card">
-            <CardContent>
-              <SelectName/>
-              <button
-                onClick={this.addToDB}>
-                Add To DB
-              </button>
-              <button
-                onClick={this.deleteAllFromDB}>
-                Delete All From DB
-              </button>
-            </CardContent>
-          </Card>
+          <form>
+            <Card className="Card">
+              <CardContent>
+                <SelectName/>
+                <Description/>
+                <button
+                  onClick={this.addToDB}>
+                  Add To DB
+                </button>
+                <button
+                  onClick={this.deleteAllFromDB}>
+                  Delete All From DB
+                </button>
+              </CardContent>
+            </Card>
+          </form>
         </main>
       </div>
     );

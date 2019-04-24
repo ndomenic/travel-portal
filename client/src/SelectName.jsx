@@ -6,17 +6,10 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 
 const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 250,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
-  },
+    minWidth: 250
+  }
 });
 
 class SelectName extends Component {
