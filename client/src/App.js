@@ -7,12 +7,6 @@ import TopBar from './TopBar';
 import SelectName from './SelectName';
 import Description from './Description';
 
-const styles = theme => ({
-  button: {
-    marginTop: 0,
-  }
-});
-
 const SubmitButton = withStyles({
   root: {
     marginTop: '10px'
@@ -35,8 +29,6 @@ class App extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-
     return (
       <div className="App">
         <header>
