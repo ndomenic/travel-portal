@@ -1,11 +1,25 @@
 import React, { Component } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import './App.css';
 import axios from 'axios';
 import TopBar from './TopBar';
 import SelectName from './SelectName';
 import Description from './Description';
+
+const styles = theme => ({
+  button: {
+    marginTop: 0,
+  }
+});
+
+const SubmitButton = withStyles({
+  root: {
+    marginTop: '10px'
+  }
+})(Button);
 
 class App extends Component {
   constructor (props) {
@@ -13,8 +27,6 @@ class App extends Component {
 
     //Bind the class functions
     this.getFromDB = this.getFromDB.bind(this);
-    this.addToDB = this.addToDB.bind(this);
-    this.deleteAllFromDB = this.deleteAllFromDB.bind(this);
 
     this.getFromDB();
   }
@@ -24,17 +36,9 @@ class App extends Component {
     .then(response => console.log(response.data["rows"]))
   }
 
-  addToDB() {
-    axios.post(process.env.REACT_APP_API + '/addToDB');
-    this.getFromDB();
-  }
-
-  deleteAllFromDB() {
-    axios.post(process.env.REACT_APP_API + '/deleteAllFromDB');
-    this.getFromDB();
-  }
-
   render() {
+    const { classes } = this.props;
+
     return (
       <div className="App">
         <header>
@@ -48,14 +52,9 @@ class App extends Component {
               <CardContent>
                 <SelectName/>
                 <Description/>
-                <button
-                  onClick={this.addToDB}>
-                  Add To DB
-                </button>
-                <button
-                  onClick={this.deleteAllFromDB}>
-                  Delete All From DB
-                </button>
+                <SubmitButton variant="contained" color="primary">
+                  Submit
+                </SubmitButton>
               </CardContent>
             </Card>
           </form>

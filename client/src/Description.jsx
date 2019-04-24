@@ -30,7 +30,7 @@ class Description extends Component {
   		<div>
         <TextField
           id="standard-multiline-flexible"
-          label="Multiline"
+          label="Description"
           multiline
           fullWidth
           rowsMax="99"
