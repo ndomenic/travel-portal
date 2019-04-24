@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
+import TopBar from './TopBar';
 
 class App extends Component {
   constructor (props) {
@@ -38,10 +38,7 @@ class App extends Component {
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
         </header>
         <main>
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Hello, world!
-          </p>
+          <TopBar/>
           <button
             onClick={this.addToDB}>
             Add To DB
