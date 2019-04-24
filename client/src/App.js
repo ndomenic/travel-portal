@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import './App.css';
@@ -48,15 +46,11 @@ class App extends Component {
         <main>
           <TopBar/>
           <form>
-            <Card className="Card">
-              <CardContent>
-                <SelectName/>
-                <Description/>
-                <SubmitButton variant="contained" color="primary">
-                  Submit
-                </SubmitButton>
-              </CardContent>
-            </Card>
+            <SelectName/>
+            <Description/>
+            <SubmitButton variant="contained" color="primary">
+              Submit
+            </SubmitButton>
           </form>
         </main>
       </div>
