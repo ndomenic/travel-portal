@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import './App.css';
 import axios from 'axios';
 import TopBar from './TopBar';
+import SelectName from './SelectName';
 
 class App extends Component {
   constructor (props) {
@@ -39,14 +42,19 @@ class App extends Component {
         </header>
         <main>
           <TopBar/>
-          <button
-            onClick={this.addToDB}>
-            Add To DB
-          </button>
-          <button
-            onClick={this.deleteAllFromDB}>
-            Delete All From DB
-          </button>
+          <Card className="Card">
+            <CardContent>
+              <SelectName/>
+              <button
+                onClick={this.addToDB}>
+                Add To DB
+              </button>
+              <button
+                onClick={this.deleteAllFromDB}>
+                Delete All From DB
+              </button>
+            </CardContent>
+          </Card>
         </main>
       </div>
     );
