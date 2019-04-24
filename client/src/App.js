@@ -33,10 +33,11 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
+        <header>
           <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"/>
           <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-
+        </header>
+        <main>
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Hello, world!
@@ -49,7 +50,7 @@ class App extends Component {
             onClick={this.deleteAllFromDB}>
             Delete All From DB
           </button>
-        </header>
+        </main>
       </div>
     );
   }
