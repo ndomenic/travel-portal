@@ -6,6 +6,7 @@ import axios from 'axios';
 import TopBar from './TopBar';
 import SelectName from './SelectName';
 import Description from './Description';
+import ImageInput from './ImageInput';
 
 const SubmitButton = withStyles({
   root: {
@@ -39,6 +40,7 @@ class App extends Component {
           <TopBar/>
           <form>
             <SelectName/>
+            <ImageInput/>
             <Description/>
             <SubmitButton variant="contained" color="primary">
               Submit

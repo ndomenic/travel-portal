@@ -2,6 +2,7 @@
   text-align: center;
 }
 
-.Card {
-	margin: 10px;
+.fileContainer {
+	margin: 0;
+	box-shadow: 0;
 }
