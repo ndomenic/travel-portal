@@ -18,10 +18,27 @@ class App extends Component {
   constructor (props) {
     super(props);
 
+    this.data = {}
+
+    this.selectName = React.createRef();
+    this.imageInput = React.createRef();
+    this.description = React.createRef();
+
     //Bind the class functions
     this.getFromDB = this.getFromDB.bind(this);
+    this.updateData = this.updateData.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
 
     this.getFromDB();
+  }
+
+  updateData(key, value) {
+    this.data[key] = value;
+  }
+
+  onSubmit() {
+    axios.post(process.env.REACT_APP_API + '/uploadData', this.data);
+    console.log(this.data);
   }
 
   getFromDB() {
@@ -39,10 +56,10 @@ class App extends Component {
         <main>
           <TopBar/>
           <form>
-            <SelectName/>
-            <ImageInput/>
-            <Description/>
-            <SubmitButton variant="contained" color="primary">
+            <SelectName ref={this.selectName} updateData={this.updateData}/>
+            <ImageInput ref={this.imageInput} updateData={this.updateData}/>
+            <Description ref={this.description} updateData={this.updateData}/>
+            <SubmitButton variant="contained" color="primary" onClick={this.onSubmit}>
               Submit
             </SubmitButton>
           </form>

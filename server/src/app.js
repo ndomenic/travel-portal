@@ -2,15 +2,22 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const db = require('./db-config');
+const bodyParser = require('body-parser');
 
 const buildDir = __dirname.substring(0, __dirname.length - 3) + 'build'
 
 //Setup the express app
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 app.use(express.static(buildDir));
 
 const pool = db.pool;
+
+app.post('/uploadData' , (req, res) => {
+	console.log('asdas')
+	console.log(req.body)
+});
 
 app.get('/getAllFromDB', (req,res) => {
 	console.log("Hit endpoint /getAllFromDB");
