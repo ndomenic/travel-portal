@@ -75,6 +75,9 @@ typings/
 # database temp files
 /server/db
 
+#uploaded pictures
+/server/files
+
 # misc
 .DS_Store
 .env.local
