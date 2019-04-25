@@ -18,6 +18,7 @@ pool.getConnection(function(err, connection) {
 let query = 'CREATE TABLE IF NOT EXISTS images( \
              id INT AUTO_INCREMENT, \
              name VARCHAR(20), \
+             location VARCHAR(99), \
              description VARCHAR(9999),\
              numFiles INT, \
              PRIMARY KEY (id))'
@@ -25,6 +26,14 @@ let query = 'CREATE TABLE IF NOT EXISTS images( \
 pool.getConnection(function(err, connection) {
     connection.query(query, function (err, rows, fields) {
         connection.release();
+        if (err) console.log(err);
+    })
+});
+
+pool.getConnection(function(err, connection) {
+    connection.query('SELECT * FROM images', function (err, rows, fields) {
+        connection.release();
+        console.log(rows);
         if (err) console.log(err);
     })
 });

@@ -6,6 +6,7 @@ import axios from 'axios';
 import TopBar from './TopBar';
 import SelectName from './SelectName';
 import Description from './Description';
+import Location from './Location';
 import ImageInput from './ImageInput';
 import FileProgress from './FileProgress';
 
@@ -91,6 +92,7 @@ class App extends Component {
           <form>
             <SelectName updateData={this.updateData}/>
             <ImageInput updateData={this.updateData}/>
+            <Location updateData={this.updateData}/>
             <Description updateData={this.updateData}/>
             <SubmitButton variant="contained" color="primary" onClick={this.onSubmit}>
               Submit
