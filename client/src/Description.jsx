@@ -4,8 +4,8 @@ import TextField from '@material-ui/core/TextField';
 
 const styles = theme => ({
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: '10px',
+    marginRight: '10px',
   }
 });
 
@@ -28,7 +28,7 @@ class Description extends Component {
     const { classes } = this.props;
 
   	return (
-  		<div>
+  		<div className={classes.textField}>
         <TextField
           id="standard-multiline-flexible"
           label="Description"
@@ -37,7 +37,6 @@ class Description extends Component {
           rowsMax="99"
           value={this.state.description}
           onChange={this.handleChange('description')}
-          className={classes.textField}
           margin="normal"
         />
       </div>

@@ -7,6 +7,7 @@ import TopBar from './TopBar';
 import SelectName from './SelectName';
 import Description from './Description';
 import ImageInput from './ImageInput';
+import FileProgress from './FileProgress';
 
 const SubmitButton = withStyles({
   root: {
@@ -26,7 +27,8 @@ class App extends Component {
 
   state = {
     done: 0,
-    progress: ""
+    progress: "",
+    uploadProgress: []
   }
 
   updateData(key, value) {
@@ -39,18 +41,29 @@ class App extends Component {
     this.data["numFiles"] = files.length;
     let ths = this;
 
+    let uploadProgress = [];
+
+    for (let i = 0; i < files.length; i++) {
+      uploadProgress.push([files[i].name, 0]);
+    }
+
     ths.setState({done: 0, progress: "Beginning upload..."});
+    ths.setState({uploadProgress: uploadProgress});
 
     axios.post(process.env.REACT_APP_API + '/uploadData', this.data).then(function (response) {
       let progress = 0 + " of " + files.length + " files uploaded";
-      ths.setState({done: 0, progress: progress});
+      ths.setState({progress: progress});
 
       for (let i = 0; i < files.length; i++) {
         var fd = new FormData();
         fd.append(name + "," + response.data["id"], files[i]);
         fd.append("test", response.data["id"]);
 
-        axios.post(process.env.REACT_APP_API + '/uploadPicture', fd).then(function (response) {
+        axios.post(process.env.REACT_APP_API + '/uploadPicture', fd, 
+          {onUploadProgress: function(progressEvent) {
+            uploadProgress[i][1] = progressEvent.loaded / progressEvent.total * 100;
+            ths.setState({uploadProgress: uploadProgress});
+          }}).then(function (response) {
           ths.setState({done: ths.state.done + 1, progress: ths.state.done + " of " + files.length + " files uploaded"}, function () {
             let progress = ths.state.done + " of " + files.length + " files uploaded";
 
@@ -59,9 +72,14 @@ class App extends Component {
         });
       }
     });
+    console.log(uploadProgress);
   }
 
   render() {
+    var fileList = this.state.uploadProgress.map(function(file) {
+      return <FileProgress fileName={file[0]} progress={file[1]}/>;
+    })
+
     return (
       <div className="App">
         <header>
@@ -80,6 +98,10 @@ class App extends Component {
             <br/><br/>
             {this.state.progress}
           </form>
+          <br/><br/>
+          <div>
+            {fileList}
+          </div>
         </main>
       </div>
     );
