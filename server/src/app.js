@@ -23,9 +23,10 @@ app.post('/uploadData' , (req, res) => {
 	let name = req.body["name"];
 	let numFiles = req.body["numFiles"];
 	let description = req.body["description"];
+	let location = req.body["location"];
 
 	pool.getConnection(function(err, connection) {
-		connection.query('INSERT INTO images(name, numFiles, description) VALUES ("' + name + '",' + numFiles + ',"' + description + '")', function (err, rows, fields) {
+		connection.query('INSERT INTO images(name, numFiles, description, location) VALUES ("' + name + '",' + numFiles + ',"' + description + '","' + location + '")', function (err, rows, fields) {
 			connection.query('SELECT * FROM images', function (err, rows, fields) {
 		        connection.release();
 		        if (err) throw err
