@@ -60,7 +60,7 @@ app.post('/uploadPicture', (req, res) => {
 		var fstream = fs.createWriteStream(idDir + "/" + filename);
 		file.pipe(fstream);
         fstream.on('close', function () {
-            res.json({"ok": "filename"})
+            res.json({"ok": filename})
         });
     });
 });

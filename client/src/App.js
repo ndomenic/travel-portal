@@ -24,6 +24,11 @@ class App extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  state = {
+    done: 0,
+    progress: ""
+  }
+
   updateData(key, value) {
     this.data[key] = value;
   }
@@ -32,13 +37,26 @@ class App extends Component {
     let files = this.data["files"];
     let name = this.data["name"];
     this.data["numFiles"] = files.length;
+    let ths = this;
+
+    ths.setState({done: 0, progress: "Beginning upload..."});
 
     axios.post(process.env.REACT_APP_API + '/uploadData', this.data).then(function (response) {
+      let progress = 0 + " of " + files.length + " files uploaded";
+      ths.setState({done: 0, progress: progress});
+
       for (let i = 0; i < files.length; i++) {
         var fd = new FormData();
         fd.append(name + "," + response.data["id"], files[i]);
         fd.append("test", response.data["id"]);
-        axios.post(process.env.REACT_APP_API + '/uploadPicture', fd);
+
+        axios.post(process.env.REACT_APP_API + '/uploadPicture', fd).then(function (response) {
+          ths.setState({done: ths.state.done + 1, progress: ths.state.done + " of " + files.length + " files uploaded"}, function () {
+            let progress = ths.state.done + " of " + files.length + " files uploaded";
+
+            ths.setState({done: ths.state.done, progress: progress});
+          });
+        });
       }
     });
   }
@@ -59,6 +77,8 @@ class App extends Component {
             <SubmitButton variant="contained" color="primary" onClick={this.onSubmit}>
               Submit
             </SubmitButton>
+            <br/><br/>
+            {this.state.progress}
           </form>
         </main>
       </div>
