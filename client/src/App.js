@@ -17,19 +17,11 @@ const SubmitButton = withStyles({
 class App extends Component {
   constructor (props) {
     super(props);
-
     this.data = {}
 
-    this.selectName = React.createRef();
-    this.imageInput = React.createRef();
-    this.description = React.createRef();
-
     //Bind the class functions
-    this.getFromDB = this.getFromDB.bind(this);
     this.updateData = this.updateData.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-
-    this.getFromDB();
   }
 
   updateData(key, value) {
@@ -37,13 +29,18 @@ class App extends Component {
   }
 
   onSubmit() {
-    axios.post(process.env.REACT_APP_API + '/uploadData', this.data);
-    console.log(this.data);
-  }
+    let files = this.data["files"];
+    let name = this.data["name"];
+    this.data["numFiles"] = files.length;
 
-  getFromDB() {
-    axios.get(process.env.REACT_APP_API + '/getAllFromDB')
-    .then(response => console.log(response.data["rows"]))
+    axios.post(process.env.REACT_APP_API + '/uploadData', this.data).then(function (response) {
+      for (let i = 0; i < files.length; i++) {
+        var fd = new FormData();
+        fd.append(name + "," + response.data["id"], files[i]);
+        fd.append("test", response.data["id"]);
+        axios.post(process.env.REACT_APP_API + '/uploadPicture', fd);
+      }
+    });
   }
 
   render() {
@@ -56,9 +53,9 @@ class App extends Component {
         <main>
           <TopBar/>
           <form>
-            <SelectName ref={this.selectName} updateData={this.updateData}/>
-            <ImageInput ref={this.imageInput} updateData={this.updateData}/>
-            <Description ref={this.description} updateData={this.updateData}/>
+            <SelectName updateData={this.updateData}/>
+            <ImageInput updateData={this.updateData}/>
+            <Description updateData={this.updateData}/>
             <SubmitButton variant="contained" color="primary" onClick={this.onSubmit}>
               Submit
             </SubmitButton>

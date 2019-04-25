@@ -9,27 +9,26 @@ const pool = mysql.createPool({
 });
 
 pool.getConnection(function(err, connection) {
-	connection.query('SELECT * FROM test', function(err, rows, fields) {
-		if (rows.length == 0) {
-			connection.query('INSERT INTO test(str) VALUES ("Hello, world!")', function (err, rows, fields) {
-			  connection.release();
-			  if (err) throw err
-			});
-		}
-	});
+    connection.query('DROP TABLE IF EXISTS test', function (err, rows, fields) {
+        connection.release();
+        if (err) console.log(err);
+    })
 });
 
-//Set up dummy data
+let query = 'CREATE TABLE IF NOT EXISTS images( \
+             id INT AUTO_INCREMENT, \
+             name VARCHAR(20), \
+             description VARCHAR(9999),\
+             numFiles INT, \
+             PRIMARY KEY (id))'
+
 pool.getConnection(function(err, connection) {
-	connection.query('CREATE TABLE IF NOT EXISTS test( \
-		id INT AUTO_INCREMENT, \
-		str VARCHAR(20), \
-		PRIMARY KEY (id)\
-		)', function (err, rows, fields) {
-			connection.release();
-	  		if (err) throw err
-	});
+    connection.query(query, function (err, rows, fields) {
+        connection.release();
+        if (err) console.log(err);
+    })
 });
+
 
 //Export the connection
 exports.pool = pool;

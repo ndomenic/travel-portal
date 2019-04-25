@@ -22,6 +22,8 @@ services:
       dockerfile: server/Dockerfile-production
     ports:
       - 8080:8080
+    volumes:
+      - ./server/files:/src/app/server/files
     links:
       - db
     depends_on:
