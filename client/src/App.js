@@ -61,7 +61,7 @@ class App extends Component {
 
         axios.post(process.env.REACT_APP_API + '/uploadPicture', fd, 
           {onUploadProgress: function(progressEvent) {
-            uploadProgress[i][1] = progressEvent.loaded / progressEvent.total * 100;
+            uploadProgress[i][1] = (progressEvent.loaded / progressEvent.total * 100).toFixed(2);;
             ths.setState({uploadProgress: uploadProgress});
           }}).then(function (response) {
           ths.setState({done: ths.state.done + 1, progress: ths.state.done + " of " + files.length + " files uploaded"}, function () {
