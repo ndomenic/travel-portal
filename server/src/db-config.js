@@ -30,14 +30,5 @@ pool.getConnection(function(err, connection) {
     })
 });
 
-pool.getConnection(function(err, connection) {
-    connection.query('SELECT * FROM images', function (err, rows, fields) {
-        connection.release();
-        console.log(rows);
-        if (err) console.log(err);
-    })
-});
-
-
 //Export the connection
 exports.pool = pool;
