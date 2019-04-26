@@ -19,7 +19,7 @@ class ImageInput extends Component {
   }
 
   handleChange(event) {
-    this.setState({len: this.files.length});
+    this.setState({len: event.target.files.length});
     this.props.updateData("files", event.target.files);
   };
 

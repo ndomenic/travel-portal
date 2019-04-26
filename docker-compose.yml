@@ -11,9 +11,17 @@ services:
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
     ports:
-      - '3306:3306'
+      - 3306:3306
     volumes:
       - ./server/db:/var/lib/mysql
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - 6379:6379
+    entrypoint: redis-server --appendonly yes
+    restart: always
 
   server:
     container_name: server
@@ -27,8 +35,10 @@ services:
       - 8080:8080
     links:
       - db
+      - redis
     depends_on:
       - db
+      - redis
     command: [sh, -c, "npm install && npm start"]
 
   client:

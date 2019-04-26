@@ -4,8 +4,13 @@ const cors = require('cors');
 const db = require('./db-config');
 const pool = db.pool;
 const bodyParser = require('body-parser');
+const uuidv4 = require('uuid/v4');
+const session = require('express-session')
 var fs = require('fs');
 var busboy = require('connect-busboy');
+const redis = require('redis');
+const redisClient = redis.createClient({host: 'redis'});
+const redisStore = require('connect-redis')(session);
 
 //Directory constants
 const serverDir = __dirname.substring(0, __dirname.length - 3)
@@ -13,10 +18,30 @@ const fileDir = serverDir + "files";
 
 //Setup the express app
 const app = express();
-app.use(cors());
+const allowedOrigins = ['http://localhost:3000', 'http://domenichini.ca:8080'];
+app.use(cors({
+	credentials: true,
+	origin: function(origin, callback){
+		if(!origin) return callback(null, true);
+		if(allowedOrigins.indexOf(origin) === -1){
+		  var msg = 'The CORS policy for this site does not ' +
+		            'allow access from the specified Origin.';
+		  return callback(new Error(msg), false);
+		}
+		return callback(null, true);
+	}
+}));
 app.use(bodyParser.json());
 app.use(busboy());
 app.use(express.static(serverDir + "build"));
+app.use(session({
+	secret: uuidv4(),
+	name: '_travelPortal',
+	resave: false,
+	saveUninitialized: true,
+	cookie: {secure: false},
+	store: new redisStore({host: 'localhost', port: 6379, client: redisClient, ttl: 86400})
+}));
 
 app.post('/uploadData' , (req, res) => {
 	//Get the data from the request body
@@ -71,6 +96,15 @@ app.post('/uploadPicture', (req, res) => {
     });
 });
 
+app.get('/testSession', (req, res) => {
+	if(req.session.page_views){
+      req.session.page_views++;
+    } else {
+      req.session.page_views = 1;
+    }
+    res.json({"num": req.session.page_views})
+});
+
 //Serve the static page if the user doesn't hit any of the other endpoints
 app.get('*', (req,res) =>{
     res.sendFile(path.join(serverDir+'build/index.html'));
@@ -85,6 +119,10 @@ app.listen(port).on('error', function(err){
 process.on('uncaughtException', function(err) {
     console.log('process.on handler');
     console.log(err);
+});
+
+redisClient.on('error', (err) => {
+  console.log('Redis error: ', err);
 });
 
 console.log('App is listening on port ' + port);

@@ -10,6 +10,8 @@ import Location from './Location';
 import ImageInput from './ImageInput';
 import FileProgress from './FileProgress';
 
+axios.defaults.withCredentials = true;
+
 const SubmitButton = withStyles({
   root: {
     marginTop: '10px'
@@ -24,6 +26,10 @@ class App extends Component {
     //Bind the class functions
     this.updateData = this.updateData.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+
+    axios.get(process.env.REACT_APP_API + '/testSession').then(function(response) {
+      console.log(response.data)
+    });
   }
 
   state = {
