@@ -37,46 +37,52 @@ class App extends Component {
   }
 
   onSubmit() {
+    //Set up some variables
     let files = this.data["files"];
     let name = this.data["name"];
     this.data["numFiles"] = files.length;
     let ths = this;
-
     let uploadProgress = [];
 
+    //File the uploadProgress array with the names and progress of each file
     for (let i = 0; i < files.length; i++) {
       uploadProgress.push([files[i].name, 0]);
     }
 
+    //Set the state to let the user know the state of the upload
     ths.setState({done: 0, progress: "Beginning upload..."});
     ths.setState({uploadProgress: uploadProgress});
 
+    //Send the images metadata to the server
     axios.post(process.env.REACT_APP_API + '/uploadData', this.data).then(function (response) {
+      //Provide user progress
       let progress = 0 + " of " + files.length + " files uploaded";
       ths.setState({progress: progress});
 
+      //Upload each file individually to the server to allow poor connections a chance
       for (let i = 0; i < files.length; i++) {
         var fd = new FormData();
         fd.append(name + "," + response.data["id"], files[i]);
-        fd.append("test", response.data["id"]);
 
         axios.post(process.env.REACT_APP_API + '/uploadPicture', fd, 
           {onUploadProgress: function(progressEvent) {
+            //Show upload progress for each file to the user
             uploadProgress[i][1] = (progressEvent.loaded / progressEvent.total * 100).toFixed(2);;
             ths.setState({uploadProgress: uploadProgress});
           }}).then(function (response) {
-          ths.setState({done: ths.state.done + 1, progress: ths.state.done + " of " + files.length + " files uploaded"}, function () {
-            let progress = ths.state.done + " of " + files.length + " files uploaded";
-
-            ths.setState({done: ths.state.done, progress: progress});
+            //Update the state with the new information
+            ths.setState({done: ths.state.done + 1, progress: ths.state.done + " of " + files.length + " files uploaded"}, function () {
+              //Ensure that the UI is populated with up to date information
+              let progress = ths.state.done + " of " + files.length + " files uploaded";
+              ths.setState({done: ths.state.done, progress: progress});
           });
         });
       }
     });
-    console.log(uploadProgress);
   }
 
   render() {
+    //A list of the files that are in the progress of being uploaded
     var fileList = this.state.uploadProgress.map(function(file) {
       return <FileProgress fileName={file[0]} progress={file[1]}/>;
     })

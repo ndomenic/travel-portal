@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-const styles = theme => ({
-});
-
 const UploadButton = withStyles({
   root: {
     marginTop: '10px'
@@ -15,7 +12,6 @@ class ImageInput extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.files = [];
   }
 
   state = {
@@ -23,9 +19,8 @@ class ImageInput extends Component {
   }
 
   handleChange(event) {
-    this.files = event.target.files;
     this.setState({len: this.files.length});
-    this.props.updateData("files", this.files);
+    this.props.updateData("files", event.target.files);
   };
 
   render() {
@@ -53,4 +48,4 @@ class ImageInput extends Component {
   }
 }
 
-export default withStyles(styles)(ImageInput);
+export default ImageInput;
