@@ -78,6 +78,9 @@ typings/
 #uploaded pictures
 /server/files
 
+#redis data
+/server/data/redis/
+
 # misc
 .DS_Store
 .env.local
