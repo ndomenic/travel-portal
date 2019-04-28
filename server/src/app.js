@@ -58,8 +58,16 @@ app.post('/uploadData' , (req, res) => {
 			//Get the most recent row's id from the images table and return it to the requester
 			connection.query('SELECT * FROM images', function (err, rows, fields) {
 		        connection.release();
-		        if (err) throw err
-		        res.json({"id": rows[rows.length-1]["id"]});
+		        if (err) throw err;
+
+		        //Store data in the session for persistence
+		        req.session.name = name;
+		        req.session.numFiles = numFiles;
+		        req.session.entryId = rows[rows.length-1]["id"];
+		        req.session.completeFiles = [];
+		        req.session.save();
+
+		        res.end();
 		    });
 		});
 	});
@@ -67,22 +75,21 @@ app.post('/uploadData' , (req, res) => {
 
 app.post('/uploadPicture', (req, res) => {
 	//Use busboy to handle files and file writing
-    req.pipe(req.busboy);
+  req.pipe(req.busboy);
 
-    req.busboy.on('file', function (fieldname, file, filename) {
-    	//Get the data of the folder which was determined by the /uploadData endpoint
-    	var dataArr = fieldname.split(',');
-    	var name = dataArr[0];
-    	var id = dataArr[1];
+  req.busboy.on('file', function (fieldname, file, filename) {
+  	//Add the current file to the list of completed files
+  	req.session.completeFiles.push(filename);
+		req.session.save();
 
-    	//Create a directory for the user's name if it doesn't exist
-    	var nameDir = fileDir + "/" + name;
-    	if (!fs.existsSync(nameDir)){
-		    fs.mkdirSync(nameDir);
+  	//Create a directory for the user's name if it doesn't exist
+  	var nameDir = fileDir + "/" + req.session.name;
+  	if (!fs.existsSync(nameDir)){
+	    fs.mkdirSync(nameDir);
 		}
 
 		//Create a directory for the id of the image
-		var idDir = nameDir + "/" + id;
+		var idDir = nameDir + "/" + req.session.id;
 		if (!fs.existsSync(idDir)){
 		    fs.mkdirSync(idDir);
 		}
@@ -90,19 +97,14 @@ app.post('/uploadPicture', (req, res) => {
 		//Write the image to the new directory and send an okay response
 		var fstream = fs.createWriteStream(idDir + "/" + filename);
 		file.pipe(fstream);
-        fstream.on('close', function () {
-            res.json({"ok": filename})
-        });
+    fstream.on('close', function () {
+      res.end();
     });
+  });
 });
 
 app.get('/testSession', (req, res) => {
-	if(req.session.page_views){
-      req.session.page_views++;
-    } else {
-      req.session.page_views = 1;
-    }
-    res.json({"num": req.session.page_views})
+    res.json({"session": req.session})
 });
 
 //Serve the static page if the user doesn't hit any of the other endpoints
@@ -123,6 +125,10 @@ process.on('uncaughtException', function(err) {
 
 redisClient.on('error', (err) => {
   console.log('Redis error: ', err);
+});
+
+process.on('SIGTERM', () => {
+  console.info('SIGTERM signal received.');
 });
 
 console.log('App is listening on port ' + port);

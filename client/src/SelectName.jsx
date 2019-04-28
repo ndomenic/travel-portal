@@ -4,6 +4,8 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 const styles = theme => ({
   formControl: {
@@ -13,6 +15,10 @@ const styles = theme => ({
 });
 
 class SelectName extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   constructor (props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -22,9 +28,16 @@ class SelectName extends Component {
     name: ""
   }
 
+   componentDidMount() {
+    const {cookies} = this.props;
+    let name = cookies.get('name');
+    if (name) this.setState({'name': name});
+  }
+
   handleChange(event) {
+    const {cookies} = this.props;
     this.setState({ [event.target.name]: event.target.value });
-    this.props.updateData("name", event.target.value);
+    cookies.set('name', event.target.value);
   };
 
   render() {
@@ -53,4 +66,4 @@ class SelectName extends Component {
   }
 }
 
-export default withStyles(styles)(SelectName);
+export default withCookies(withStyles(styles)(SelectName));

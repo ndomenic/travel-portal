@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 const UploadButton = withStyles({
   root: {
@@ -9,6 +11,10 @@ const UploadButton = withStyles({
 })(Button);
 
 class ImageInput extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -19,6 +25,7 @@ class ImageInput extends Component {
   }
 
   handleChange(event) {
+    //const { cookies } = this.props;
     this.setState({len: event.target.files.length});
     this.props.updateData("files", event.target.files);
   };
@@ -48,4 +55,4 @@ class ImageInput extends Component {
   }
 }
 
-export default ImageInput;
+export default withCookies(ImageInput);

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
 
 const styles = theme => ({
   textField: {
@@ -10,6 +12,10 @@ const styles = theme => ({
 });
 
 class Location extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   constructor (props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -19,18 +25,24 @@ class Location extends Component {
     location: ""
   }
 
+  componentDidMount() {
+    const {cookies} = this.props;
+    let location = cookies.get('location')
+    if (location) this.setState({'location': location});
+  }
+
   handleChange = name => event => {
+    const {cookies} = this.props;
     this.setState({[name]: event.target.value});
-    this.props.updateData("location", event.target.value);
+    cookies.set('location', event.target.value);
   };
 
   render() {
-    const { classes } = this.props;
+    const {classes} = this.props;
 
   	return (
   		<div className={classes.textField}>
         <TextField
-          id="standard-multiline-flexible"
           label="Location"
           fullWidth
           value={this.state.location}
@@ -42,4 +54,4 @@ class Location extends Component {
   }
 }
 
-export default withStyles(styles)(Location);
+export default withCookies(withStyles(styles)(Location));

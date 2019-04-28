@@ -10,6 +10,9 @@ import Location from './Location';
 import ImageInput from './ImageInput';
 import FileProgress from './FileProgress';
 
+import { instanceOf } from 'prop-types';
+import { withCookies, Cookies } from 'react-cookie';
+
 axios.defaults.withCredentials = true;
 
 const SubmitButton = withStyles({
@@ -19,6 +22,10 @@ const SubmitButton = withStyles({
 })(Button);
 
 class App extends Component {
+  static propTypes = {
+    cookies: instanceOf(Cookies).isRequired
+  };
+
   constructor (props) {
     super(props);
     this.data = {}
@@ -43,16 +50,34 @@ class App extends Component {
   }
 
   onSubmit() {
+    const { cookies } = this.props;
+
+    //Get data from cookies
+    this.data['name'] = cookies.get('name');
+    this.data['location'] = cookies.get('location');
+    this.data['description'] = cookies.get('description');
+    
+
+
+
     //Set up some variables
     let files = this.data["files"];
-    let name = this.data["name"];
     this.data["numFiles"] = files.length;
+    this.data["fileNames"] = []
     let ths = this;
     let uploadProgress = [];
 
-    //File the uploadProgress array with the names and progress of each file
+
+
+
+    
+    let test = cookies.get('files');
+    console.log(test);
+
+    //File the uploadProgress and fileNames array with the names and progress of each file
     for (let i = 0; i < files.length; i++) {
       uploadProgress.push([files[i].name, 0]);
+      this.data["fileNames"].push(files[i].name);
     }
 
     //Set the state to let the user know the state of the upload
@@ -68,7 +93,7 @@ class App extends Component {
       //Upload each file individually to the server to allow poor connections a chance
       for (let i = 0; i < files.length; i++) {
         var fd = new FormData();
-        fd.append(name + "," + response.data["id"], files[i]);
+        fd.append("filename", files[i]);
 
         axios.post(process.env.REACT_APP_API + '/uploadPicture', fd, 
           {onUploadProgress: function(progressEvent) {
@@ -90,7 +115,7 @@ class App extends Component {
   render() {
     //A list of the files that are in the progress of being uploaded
     var fileList = this.state.uploadProgress.map(function(file) {
-      return <FileProgress fileName={file[0]} progress={file[1]}/>;
+      return <FileProgress key={file[0]} fileName={file[0]} progress={file[1]}/>;
     })
 
     return (
@@ -102,10 +127,10 @@ class App extends Component {
         <main>
           <TopBar/>
           <form>
-            <SelectName updateData={this.updateData}/>
+            <SelectName/>
             <ImageInput updateData={this.updateData}/>
-            <Location updateData={this.updateData}/>
-            <Description updateData={this.updateData}/>
+            <Location/>
+            <Description/>
             <SubmitButton variant="contained" color="primary" onClick={this.onSubmit}>
               Submit
             </SubmitButton>
@@ -122,4 +147,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withCookies(App);
