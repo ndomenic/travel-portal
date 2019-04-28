@@ -13,7 +13,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - ./server/db:/var/lib/mysql
+      - /var/www/travel-portal-db:/var/lib/mysql
 
   redis:
     container_name: redis
@@ -31,7 +31,7 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./server/files:/src/app/server/files
+      - /var/www/files:/src/app/server/files
     links:
       - db
       - redis
