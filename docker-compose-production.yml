@@ -13,7 +13,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - ./server/db:/var/lib/mysql
+      - /var/travel-portal-db:/var/lib/mysql
 
   redis:
     container_name: redis
